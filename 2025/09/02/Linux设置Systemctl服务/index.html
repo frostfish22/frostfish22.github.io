@@ -1,0 +1,387 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linux设置Systemctl服务 | frostfishc</title><meta name="author" content="frostfish22"><meta name="copyright" content="frostfish22"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="一、什么是Systemctl1.1 Systemctl简介Systemctl是Linux系统中用于管理systemd系统和服务管理器的主要命令行工具。它允许用户查看、启动、停止、重启、启用和禁用系统服务，以及检查服务状态等。 1.2 Systemd与Systemctl的关系Systemd是Linux系统的初始化系统和服务管理器，负责启动系统、管理后台进程和服务。 而Systemctl则是与syst">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux设置Systemctl服务">
+<meta property="og:url" content="http://example.com/2025/09/02/Linux%E8%AE%BE%E7%BD%AESystemctl%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="frostfishc">
+<meta property="og:description" content="一、什么是Systemctl1.1 Systemctl简介Systemctl是Linux系统中用于管理systemd系统和服务管理器的主要命令行工具。它允许用户查看、启动、停止、重启、启用和禁用系统服务，以及检查服务状态等。 1.2 Systemd与Systemctl的关系Systemd是Linux系统的初始化系统和服务管理器，负责启动系统、管理后台进程和服务。 而Systemctl则是与syst">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-09-02T07:23:21.000Z">
+<meta property="article:modified_time" content="2025-09-02T07:23:36.778Z">
+<meta property="article:author" content="frostfish22">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux设置Systemctl服务",
+  "url": "http://example.com/2025/09/02/Linux%E8%AE%BE%E7%BD%AESystemctl%E6%9C%8D%E5%8A%A1/",
+  "image": "http://example.com/img/butterfly-icon.png",
+  "datePublished": "2025-09-02T07:23:21.000Z",
+  "dateModified": "2025-09-02T07:23:36.778Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "frostfish22",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/09/02/Linux%E8%AE%BE%E7%BD%AESystemctl%E6%9C%8D%E5%8A%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux设置Systemctl服务',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(https://images.cnblogs.com/cnblogs_com/blogs/724654/galleries/2439766/o_250104200538_003042-17317746425c6f.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">frostfishc</span></a><a class="nav-page-title" href="/"><span class="site-name">Linux设置Systemctl服务</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Linux设置Systemctl服务</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-02T07:23:21.000Z" title="发表于 2025-09-02 15:23:21">2025-09-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-02T07:23:36.778Z" title="更新于 2025-09-02 15:23:36">2025-09-02</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="一、什么是Systemctl"><a href="#一、什么是Systemctl" class="headerlink" title="一、什么是Systemctl"></a>一、什么是Systemctl</h2><h3 id="1-1-Systemctl简介"><a href="#1-1-Systemctl简介" class="headerlink" title="1.1 Systemctl简介"></a>1.1 Systemctl简介</h3><p><code>Systemctl</code>是Linux系统中用于管理<code>systemd</code>系统和服务管理器的主要命令行工具。它允许用户查看、启动、停止、重启、启用和禁用系统服务，以及检查服务状态等。</p>
+<h3 id="1-2-Systemd与Systemctl的关系"><a href="#1-2-Systemd与Systemctl的关系" class="headerlink" title="1.2 Systemd与Systemctl的关系"></a>1.2 Systemd与Systemctl的关系</h3><p><code>Systemd</code>是Linux系统的初始化系统和服务管理器，负责启动系统、管理后台进程和服务。</p>
+<p>而<code>Systemctl</code>则是与<code>systemd</code>交互的命令行接口工具，用户通过<code>Systemctl</code>命令来控制和管理<code>systemd</code>服务。</p>
+<p>简单来说，<code>systemd</code>是底层的服务管理系统，<code>Systemctl</code>是用户操作这个系统的工具。</p>
+<h3 id="1-3-为什么需要使用Systemctl管理服务"><a href="#1-3-为什么需要使用Systemctl管理服务" class="headerlink" title="1.3 为什么需要使用Systemctl管理服务"></a>1.3 为什么需要使用Systemctl管理服务</h3><ul>
+<li><strong>统一管理</strong>：<code>Systemctl</code>提供了统一的接口来管理各种系统服务，取代了传统的SysV init脚本。</li>
+<li><strong>服务依赖</strong>：<code>Systemctl</code>可以轻松处理服务之间的依赖关系，确保服务按正确顺序启动。</li>
+<li><strong>状态监控</strong>：实时查看服务运行状态，快速定位问题。</li>
+<li><strong>开机自启</strong>：便捷设置服务开机自启动或禁用自启动。</li>
+<li><strong>资源管理</strong>：通过cgroups对服务进行资源限制和管理。</li>
+<li><strong>日志管理</strong>：<code>Systemctl</code>可以查看服务的日志，帮助定位问题。</li>
+</ul>
+<p>对于日常工作而言，掌握<code>Systemctl</code>可以帮助我们更高效地管理和维护Linux系统服务，确保服务稳定运行。</p>
+<h2 id="二、服务文件基础"><a href="#二、服务文件基础" class="headerlink" title="二、服务文件基础"></a>二、服务文件基础</h2><h3 id="2-1-服务文件的位置与命名规则"><a href="#2-1-服务文件的位置与命名规则" class="headerlink" title="2.1 服务文件的位置与命名规则"></a>2.1 服务文件的位置与命名规则</h3><p><code>Systemd</code>服务文件主要存放在两个目录：</p>
+<ul>
+<li><strong>&#x2F;etc&#x2F;systemd&#x2F;system&#x2F;</strong>：<strong>用户自定义服务</strong>文件通常放在这个目录</li>
+<li><strong>&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;</strong>：<strong>系统自带服务</strong>文件存放在这里</li>
+</ul>
+<p>服务文件的命名必须以<code>.service</code>为后缀，例如<code>myapp.service</code>。文件名应简洁明了，能反映服务的功能。</p>
+<blockquote>
+<p>在启动服务时，输入的服务名称为文件名去掉后缀的部分，例如<code>myapp.service</code>的服务名称为<code>myapp</code>。当然也可以加上<code>.service</code>。</p>
+</blockquote>
+<h3 id="2-2-服务文件的基本结构"><a href="#2-2-服务文件的基本结构" class="headerlink" title="2.2 服务文件的基本结构"></a>2.2 服务文件的基本结构</h3><blockquote>
+<p>这一块内容读者可以随机打开一个服务文件，查看其内容，对着下述的基本结构说明来辅助理解，同时尝试自己来添加服务。一般都会包含<code>[Unit]</code>、<code>[Service]</code>、<code>[install]</code>三部分。</p>
+</blockquote>
+<p>一个标准的Systemd服务文件由三个主要部分组成：</p>
+<ul>
+<li><code>[Unit]</code>：包含服务的描述、依赖关系等<strong>元数据</strong></li>
+<li><code>[Service]</code>：定义服务的运行方式、启动命令等<strong>核心配置</strong></li>
+<li><code>[Install]</code>：指定服务<strong>安装信息</strong>，如开机自启设置</li>
+</ul>
+<h3 id="2-3-核心配置项解释"><a href="#2-3-核心配置项解释" class="headerlink" title="2.3 核心配置项解释"></a>2.3 核心配置项解释</h3><h4 id="2-3-1-Unit-部分"><a href="#2-3-1-Unit-部分" class="headerlink" title="2.3.1 [Unit]部分"></a>2.3.1 [Unit]部分</h4><ul>
+<li><code>Description</code>：服务的简短描述</li>
+<li><code>Documentation</code>：服务文档的URL</li>
+<li><code>After</code>：指定服务应在哪些服务之后启动</li>
+<li><code>Requires</code>：指定服务依赖的其他服务，若依赖服务启动失败，当前服务也不会启动</li>
+<li><code>Wants</code>：指定服务希望依赖的其他服务，若依赖服务启动失败，当前服务仍会尝试启动</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=My Python Application</span><br><span class="line"><span class="attr">Documentation</span>=https://example.com/docs</span><br><span class="line"><span class="attr">After</span>=network.target</span><br><span class="line"><span class="attr">Requires</span>=mysql.service</span><br><span class="line"><span class="attr">Wants</span>=redis.service</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-2-Service-部分"><a href="#2-3-2-Service-部分" class="headerlink" title="2.3.2 [Service]部分"></a>2.3.2 [Service]部分</h4><ul>
+<li><code>Type</code>：服务的类型，常见值：<ul>
+<li><code>simple</code>（默认）：服务启动后立即进入后台运行</li>
+<li><code>forking</code>：服务启动后会创建子进程，父进程退出</li>
+<li><code>oneshot</code>：服务一次性运行完成后退出</li>
+</ul>
+</li>
+<li><code>ExecStart</code>：启动服务的命令</li>
+<li><code>ExecStop</code>：停止服务的命令</li>
+<li><code>Restart</code>：指定服务何时应自动重启（如<code>always</code>、<code>on-failure</code>等）</li>
+<li><code>User</code>：指定运行服务的用户</li>
+<li><code>WorkingDirectory</code>：服务的工作目录</li>
+<li><code>Environment</code>：设置环境变量</li>
+</ul>
+<blockquote>
+<p>这里的关键点就是<code>ExecStart</code>和<code>ExecStop</code>这两个参数。决定了你实际服务的启动和停止。</p>
+<p>例如，你可以使用<code>ExecStart=/usr/bin/python3 /path/to/myapp.py</code>来启动一个Python应用，使用<code>ExecStop=/bin/kill -TERM $MAINPID</code>来停止它。</p>
+<p>其中，<code>$MAINPID</code>是一个环境变量，它会被<code>systemd</code>替换为服务的主进程ID。</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=simple</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/python3 /path/to/myapp.py</span><br><span class="line"><span class="attr">ExecStop</span>=/bin/kill -TERM <span class="variable">$MAINPID</span></span><br><span class="line"><span class="attr">Restart</span>=<span class="literal">on</span>-failure</span><br><span class="line"><span class="attr">User</span>=www-data</span><br><span class="line"><span class="attr">WorkingDirectory</span>=/path/to/</span><br><span class="line"><span class="attr">Environment</span>=PYTHONPATH=/path/to/lib</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-3-Install-部分"><a href="#2-3-3-Install-部分" class="headerlink" title="2.3.3 [Install]部分"></a>2.3.3 [Install]部分</h4><ul>
+<li><code>WantedBy</code>：指定服务被启用时应链接到哪个target（通常是<code>multi-user.target</code>）</li>
+<li><code>Alias</code>：服务的别名</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br><span class="line"><span class="attr">Alias</span>=myapp</span><br></pre></td></tr></table></figure>
+
+<p>理解这些配置项是创建和管理Systemd服务的基础。在实际使用中，我们可以根据服务的特性调整这些配置。</p>
+<h2 id="三、创建简单服务示例"><a href="#三、创建简单服务示例" class="headerlink" title="三、创建简单服务示例"></a>三、创建简单服务示例</h2><h3 id="3-1-示例场景介绍"><a href="#3-1-示例场景介绍" class="headerlink" title="3.1 示例场景介绍"></a>3.1 示例场景介绍</h3><p>假设我们有一个简单的Python脚本，它实现了一个基础的Web服务器，用于提供静态文件服务。我们希望将这个脚本作为系统服务运行，以便在系统启动时自动启动，并能通过Systemctl进行管理。</p>
+<p>示例Python脚本（<code>simple_server.py</code>）内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> http.server</span><br><span class="line"><span class="keyword">import</span> socketserver</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义端口</span></span><br><span class="line">PORT = <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建请求处理器</span></span><br><span class="line">Handler = http.server.SimpleHTTPRequestHandler</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建TCP服务器</span></span><br><span class="line"><span class="keyword">with</span> socketserver.TCPServer((<span class="string">&quot;&quot;</span>, PORT), Handler) <span class="keyword">as</span> httpd:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;服务启动在端口 <span class="subst">&#123;PORT&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="comment"># 启动服务器</span></span><br><span class="line">    httpd.serve_forever()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-编写服务文件"><a href="#3-2-编写服务文件" class="headerlink" title="3.2 编写服务文件"></a>3.2 编写服务文件</h3><p>我们将创建一个名为<code>simple-server.service</code>的服务文件，存放在<code>/etc/systemd/system/</code>目录下。</p>
+<p>完整服务文件内容：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Simple Python Web Server</span><br><span class="line"><span class="attr">Documentation</span>=https://example.com/docs</span><br><span class="line"><span class="attr">After</span>=network.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=simple</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/python3 /path/to/simple_server.py</span><br><span class="line"><span class="attr">ExecStop</span>=/bin/kill -TERM <span class="variable">$MAINPID</span></span><br><span class="line"><span class="attr">Restart</span>=<span class="literal">on</span>-failure</span><br><span class="line"><span class="attr">User</span>=www-data</span><br><span class="line"><span class="attr">WorkingDirectory</span>=/path/to/webroot</span><br><span class="line"><span class="attr">Environment</span>=PYTHONUNBUFFERED=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br><span class="line"><span class="attr">Alias</span>=simple-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-服务文件各参数详解"><a href="#3-3-服务文件各参数详解" class="headerlink" title="3.3 服务文件各参数详解"></a>3.3 服务文件各参数详解</h3><h4 id="3-3-1-Unit-部分"><a href="#3-3-1-Unit-部分" class="headerlink" title="3.3.1 [Unit]部分"></a>3.3.1 [Unit]部分</h4><ul>
+<li><code>Description</code>：服务的简短描述，这里描述为”Simple Python Web Server”</li>
+<li><code>Documentation</code>：服务文档的URL，可以指向项目文档或说明</li>
+<li><code>After=network.target</code>：指定服务应在网络服务启动后启动，确保网络可用</li>
+</ul>
+<h4 id="3-3-2-Service-部分"><a href="#3-3-2-Service-部分" class="headerlink" title="3.3.2 [Service]部分"></a>3.3.2 [Service]部分</h4><ul>
+<li><code>Type=simple</code>：服务类型为simple，表示服务启动后立即进入后台运行</li>
+<li><code>ExecStart=/usr/bin/python3 /path/to/simple_server.py</code>：启动服务的命令，指定Python解释器和脚本路径</li>
+<li><code>ExecStop=/bin/kill -TERM $MAINPID</code>：停止服务的命令，使用kill命令发送TERM信号给主进程</li>
+<li><code>Restart=on-failure</code>：指定服务在失败时自动重启</li>
+<li><code>User=www-data</code>：指定运行服务的用户为www-data（Web服务器常用用户）</li>
+<li><code>WorkingDirectory=/path/to/webroot</code>：服务的工作目录，这里设置为Web根目录</li>
+<li><code>Environment=PYTHONUNBUFFERED=1</code>：设置环境变量，确保Python输出不缓冲</li>
+</ul>
+<h4 id="3-3-3-Install-部分"><a href="#3-3-3-Install-部分" class="headerlink" title="3.3.3 [Install]部分"></a>3.3.3 [Install]部分</h4><ul>
+<li><code>WantedBy=multi-user.target</code>：指定服务被启用时链接到multi-user.target，这是默认的运行级别</li>
+<li><code>Alias=simple-server</code>：服务的别名，方便用户通过别名管理服务</li>
+</ul>
+<h4 id="3-3-4-服务文件部署步骤"><a href="#3-3-4-服务文件部署步骤" class="headerlink" title="3.3.4 服务文件部署步骤"></a>3.3.4 服务文件部署步骤</h4><ol>
+<li>将Python脚本放置在指定目录，例如<code>/opt/scripts/simple_server.py</code></li>
+<li>赋予脚本执行权限：<code>chmod +x /opt/scripts/simple_server.py</code></li>
+<li>创建服务文件：<code>sudo nano /etc/systemd/system/simple-server.service</code>，并粘贴上面的服务文件内容</li>
+<li>重新加载Systemd配置：<code>sudo systemctl daemon-reload</code></li>
+<li>启用服务：<code>sudo systemctl enable simple-server</code></li>
+<li>启动服务：<code>sudo systemctl start simple-server</code></li>
+</ol>
+<p>通过以上步骤，我们就成功创建并启动了一个简单的Python Web服务器服务。</p>
+<h2 id="四、服务管理命令"><a href="#四、服务管理命令" class="headerlink" title="四、服务管理命令"></a>四、服务管理命令</h2><p>Systemctl提供了一系列命令来管理服务，下面介绍最常用的几个命令：</p>
+<h3 id="4-1-启用服务"><a href="#4-1-启用服务" class="headerlink" title="4.1 启用服务"></a>4.1 启用服务</h3><p>启用服务是指设置服务在系统开机时自动启动。启用服务后，即使系统重启，服务也会自动运行。</p>
+<p><strong>命令格式</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> [服务名称]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> simple-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-启动-停止服务"><a href="#4-2-启动-停止服务" class="headerlink" title="4.2 启动&#x2F;停止服务"></a>4.2 启动&#x2F;停止服务</h3><p>启动服务用于手动启动一个服务，停止服务用于手动停止一个正在运行的服务。</p>
+<p><strong>命令格式</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start [服务名称]  <span class="comment"># 启动服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl stop [服务名称]   <span class="comment"># 停止服务</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start simple-server  <span class="comment"># 启动我们创建的Python Web服务器服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl stop simple-server   <span class="comment"># 停止服务</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-重启服务"><a href="#4-3-重启服务" class="headerlink" title="4.3 重启服务"></a>4.3 重启服务</h3><p>当服务配置发生变化或服务出现异常时，可以使用重启命令重新启动服务。</p>
+<p><strong>命令格式</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart [服务名称]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart simple-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-查看服务状态"><a href="#4-4-查看服务状态" class="headerlink" title="4.4 查看服务状态"></a>4.4 查看服务状态</h3><p>查看服务状态可以了解服务是否正在运行、是否启动成功、以及服务的详细信息。</p>
+<p><strong>命令格式</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status [服务名称]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status simple-server</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出说明</strong>：</p>
+<ul>
+<li><code>active (running)</code>：服务正在运行</li>
+<li><code>inactive (dead)</code>：服务未运行</li>
+<li><code>failed</code>：服务启动失败</li>
+<li>输出中还包含服务的启动时间、主进程ID、以及最近的日志信息</li>
+</ul>
+<h3 id="4-5-查看服务日志"><a href="#4-5-查看服务日志" class="headerlink" title="4.5 查看服务日志"></a>4.5 查看服务日志</h3><p>查看服务日志可以帮助我们排查服务启动或运行过程中遇到的问题。</p>
+<p><strong>命令格式</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> journalctl -u [服务名称]</span><br></pre></td></tr></table></figure>
+
+<p><strong>常用选项</strong>：</p>
+<ul>
+<li><code>-f</code>：实时跟踪日志输出</li>
+<li><code>-n [数字]</code>：显示最近的[数字]行日志</li>
+<li><code>--since &quot;YYYY-MM-DD HH:MM:SS&quot;</code>：显示指定时间之后的日志</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> journalctl -u simple-server  <span class="comment"># 查看服务的所有日志</span></span><br><span class="line"><span class="built_in">sudo</span> journalctl -u simple-server -f  <span class="comment"># 实时跟踪服务日志</span></span><br><span class="line"><span class="built_in">sudo</span> journalctl -u simple-server -n 50  <span class="comment"># 查看最近50行日志</span></span><br><span class="line"><span class="built_in">sudo</span> journalctl -u simple-server --since <span class="string">&quot;2023-10-01 00:00:00&quot;</span>  <span class="comment"># 查看10月1日之后的日志</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-6-禁用服务"><a href="#4-6-禁用服务" class="headerlink" title="4.6 禁用服务"></a>4.6 禁用服务</h3><p>禁用服务是指取消服务的开机自启动设置，但不会影响当前正在运行的服务。</p>
+<p><strong>命令格式</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> [服务名称]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> simple-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-7-其他常用命令"><a href="#4-7-其他常用命令" class="headerlink" title="4.7 其他常用命令"></a>4.7 其他常用命令</h3><ul>
+<li><p><strong>重新加载服务配置</strong>：当修改了服务文件后，需要重新加载Systemd配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>查看服务是否启用</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl is-enabled [服务名称]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>列出所有服务</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl list-units --<span class="built_in">type</span>=service</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>通过以上命令，我们可以全面地管理和监控Systemd服务。在日常工作中，这些命令是使用Systemctl管理服务的基础。</p>
+<h2 id="五、常见问题与解决"><a href="#五、常见问题与解决" class="headerlink" title="五、常见问题与解决"></a>五、常见问题与解决</h2><p>在使用Systemctl管理服务的过程中，可能会遇到各种问题。以下是一些常见问题及解决方法。</p>
+<h3 id="服务启动失败的排查方法"><a href="#服务启动失败的排查方法" class="headerlink" title="服务启动失败的排查方法"></a>服务启动失败的排查方法</h3><p>当服务启动失败时，可以按照以下步骤进行排查：</p>
+<ol>
+<li><p><strong>查看服务状态</strong>：首先使用<code>systemctl status [服务名]</code>命令查看服务的当前状态和错误信息。这通常会显示服务启动失败的直接原因。</p>
+</li>
+<li><p><strong>检查配置文件语法</strong>：使用<code>systemctl daemon-reload</code>命令重新加载配置文件，如果配置文件有语法错误，会在此步骤报错。</p>
+</li>
+<li><p><strong>查看详细日志</strong>：通过<code>journalctl -u [服务名]</code>命令查看服务的详细日志，寻找错误提示。</p>
+</li>
+<li><p><strong>测试执行命令</strong>：如果服务是执行某个脚本或程序，可以尝试直接在命令行执行该命令，看是否能正常运行。</p>
+</li>
+<li><p><strong>检查依赖服务</strong>：使用<code>systemctl list-dependencies [服务名]</code>查看服务的依赖关系，确保所有依赖服务都已正常启动。</p>
+</li>
+</ol>
+<h3 id="权限问题处理"><a href="#权限问题处理" class="headerlink" title="权限问题处理"></a>权限问题处理</h3><p>权限问题是服务启动失败的常见原因之一：</p>
+<ol>
+<li><p><strong>文件权限</strong>：确保服务文件和相关脚本具有正确的权限。通常服务文件应具有<code>644</code>权限，可执行脚本应具有<code>755</code>权限。</p>
+</li>
+<li><p><strong>用户权限</strong>：服务中指定的运行用户（通过<code>User=</code>和<code>Group=</code>配置）应具有访问相关文件和目录的权限。</p>
+</li>
+<li><p><strong>SELinux&#x2F;AppArmor限制</strong>：如果系统启用了SELinux或AppArmor，可能会限制服务的某些操作。可以通过查看相关日志或临时禁用这些安全机制来确认是否是权限问题。</p>
+</li>
+<li><p><strong>文件上下文</strong>：对于SELinux，确保文件具有正确的安全上下文。可以使用<code>chcon</code>或<code>restorecon</code>命令修复文件上下文。</p>
+</li>
+</ol>
+<h3 id="路径问题解决"><a href="#路径问题解决" class="headerlink" title="路径问题解决"></a>路径问题解决</h3><p>路径问题也是常见的服务启动障碍：</p>
+<ol>
+<li><p><strong>使用绝对路径</strong>：在服务文件中，特别是<code>ExecStart=</code>、<code>ExecStop=</code>等指令中，应使用程序和文件的绝对路径，避免依赖环境变量。</p>
+</li>
+<li><p><strong>检查工作目录</strong>：如果服务需要在特定目录下运行，可以通过<code>WorkingDirectory=</code>配置指定工作目录。</p>
+</li>
+<li><p><strong>环境变量</strong>：如果程序依赖特定的环境变量，可以在服务文件中通过<code>Environment=</code>或<code>EnvironmentFile=</code>配置设置环境变量。</p>
+</li>
+<li><p><strong>路径不存在</strong>：确保服务文件中引用的所有路径（包括程序路径、配置文件路径、日志文件路径等）都存在。</p>
+</li>
+</ol>
+<h3 id="日志查看技巧"><a href="#日志查看技巧" class="headerlink" title="日志查看技巧"></a>日志查看技巧</h3><p>有效查看日志对于排查问题至关重要：</p>
+<ol>
+<li><p><strong>实时查看日志</strong>：使用<code>journalctl -u [服务名] -f</code>命令实时查看服务的日志输出。</p>
+</li>
+<li><p><strong>查看特定时间范围的日志</strong>：使用<code>journalctl -u [服务名] --since &quot;2025-07-01 10:00:00&quot; --until &quot;2025-07-01 11:00:00&quot;</code>查看特定时间段的日志。</p>
+</li>
+<li><p><strong>过滤错误日志</strong>：使用<code>journalctl -u [服务名] -p err</code>只查看错误级别的日志。</p>
+</li>
+<li><p><strong>查看引导以来的日志</strong>：使用<code>journalctl -u [服务名] -b</code>查看当前引导以来的服务日志。</p>
+</li>
+<li><p><strong>导出日志</strong>：如果需要保存日志供后续分析，可以使用<code>journalctl -u [服务名] --output=short-precise &gt; service.log</code>将日志导出到文件。</p>
+</li>
+</ol>
+<h2 id="七、总结"><a href="#七、总结" class="headerlink" title="七、总结"></a>七、总结</h2><p>从基础概念出发，我们理解了Systemctl作为管理Systemd的命令行工具的重要性，以及其统一管理、服务依赖等五大核心优势。在服务文件学习中，我们详细了解了服务文件的两个主要存放位置（&#x2F;etc&#x2F;systemd&#x2F;system&#x2F;和&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;）、.service后缀命名规则，以及[Unit]、[Service]、[Install]三个核心部分的配置项含义与用法。</p>
+<p>通过Python Web服务器的实例，我们亲身体验了创建服务文件、部署和管理服务的完整流程，掌握了从编写脚本到启用、启动服务的全步骤操作。在命令管理部分，我们系统学习了启用（enable）、启动&#x2F;停止（start&#x2F;stop）、重启（restart）、查看状态（status）、查看日志（journalctl -u）、禁用（disable）等常用命令，以及daemon-reload等实用操作。</p>
+<p>最后，针对常见问题，我们总结了服务启动失败排查的五步流程、权限问题处理技巧、路径问题解决方法和日志查看的多种实用技巧，为实际应用中可能遇到的问题提供了有效的解决方案。</p>
+<p>本文内容通俗易懂，示例丰富，符合科普性质，无论是Linux初学者还是系统管理员，都能通过本文快速掌握Systemctl服务管理的核心技能，提升Linux系统管理效率。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">frostfish22</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/09/02/Linux%E8%AE%BE%E7%BD%AESystemctl%E6%9C%8D%E5%8A%A1/">http://example.com/2025/09/02/Linux%E8%AE%BE%E7%BD%AESystemctl%E6%9C%8D%E5%8A%A1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">frostfishc</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/09/02/Pydantic%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Pydantic使用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Pydantic使用指南</div></div><div class="info-2"><div class="info-item-1">一、引言 以下Pydantic使用的版本为2.0.0，不同版本的Pydantic可能会有一些差异，特别是在一些新的功能和废弃的功能上，建议查看官方文档。  1.1 什么是PydanticPydantic是Python中最广泛使用的基于Python类型提示的数据验证和设置管理库，它遵循纯正的Python 3.9+标准，能帮助开发者轻松验证数据、管理配置并减少样板代码。该库快速且可扩展，能与代码分析器、集成开发环境良好配合，便于进行数据验证工作。 1.2 为什么选择Pydantic 由类型提示驱动：用Pydantic的时候，模式验证和序列化都靠类型注解来控制。就不用学太多东西，也不用写很多代码，还能和IDE以及静态分析工具完美配合。 速度快：Pydantic的核心验证逻辑是用Rust写的，所以它是Python里最快的数据验证库之一。 支持JSON Schema：Pydantic模型能生成JSON Schema，这样就能轻松和其他工具集成。 严格模式和宽松模式：Pydantic有两种模式可以选。严格模式下，数据不会被转换；宽松模式下，Pydantic会在合适的时候把数据转换成正确的类型...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">frostfish22</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFSystemctl"><span class="toc-number">1.</span> <span class="toc-text">一、什么是Systemctl</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Systemctl%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Systemctl简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Systemd%E4%B8%8ESystemctl%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Systemd与Systemctl的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%BD%BF%E7%94%A8Systemctl%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 为什么需要使用Systemctl管理服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%9C%8D%E5%8A%A1%E6%96%87%E4%BB%B6%E5%9F%BA%E7%A1%80"><span class="toc-number">2.</span> <span class="toc-text">二、服务文件基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%9C%8D%E5%8A%A1%E6%96%87%E4%BB%B6%E7%9A%84%E4%BD%8D%E7%BD%AE%E4%B8%8E%E5%91%BD%E5%90%8D%E8%A7%84%E5%88%99"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 服务文件的位置与命名规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%9C%8D%E5%8A%A1%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 服务文件的基本结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E9%A1%B9%E8%A7%A3%E9%87%8A"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 核心配置项解释</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-Unit-%E9%83%A8%E5%88%86"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.3.1 [Unit]部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-Service-%E9%83%A8%E5%88%86"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.3.2 [Service]部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-Install-%E9%83%A8%E5%88%86"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3.3 [Install]部分</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%9B%E5%BB%BA%E7%AE%80%E5%8D%95%E6%9C%8D%E5%8A%A1%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.</span> <span class="toc-text">三、创建简单服务示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%A4%BA%E4%BE%8B%E5%9C%BA%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 示例场景介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%BC%96%E5%86%99%E6%9C%8D%E5%8A%A1%E6%96%87%E4%BB%B6"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 编写服务文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%9C%8D%E5%8A%A1%E6%96%87%E4%BB%B6%E5%90%84%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 服务文件各参数详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-Unit-%E9%83%A8%E5%88%86"><span class="toc-number">3.3.1.</span> <span class="toc-text">3.3.1 [Unit]部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-Service-%E9%83%A8%E5%88%86"><span class="toc-number">3.3.2.</span> <span class="toc-text">3.3.2 [Service]部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-3-Install-%E9%83%A8%E5%88%86"><span class="toc-number">3.3.3.</span> <span class="toc-text">3.3.3 [Install]部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-4-%E6%9C%8D%E5%8A%A1%E6%96%87%E4%BB%B6%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4"><span class="toc-number">3.3.4.</span> <span class="toc-text">3.3.4 服务文件部署步骤</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">四、服务管理命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%90%AF%E7%94%A8%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 启用服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%90%AF%E5%8A%A8-%E5%81%9C%E6%AD%A2%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 启动&#x2F;停止服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E9%87%8D%E5%90%AF%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 重启服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%9F%A5%E7%9C%8B%E6%9C%8D%E5%8A%A1%E7%8A%B6%E6%80%81"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 查看服务状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E6%9F%A5%E7%9C%8B%E6%9C%8D%E5%8A%A1%E6%97%A5%E5%BF%97"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 查看服务日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E7%A6%81%E7%94%A8%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.6.</span> <span class="toc-text">4.6 禁用服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">4.7.</span> <span class="toc-text">4.7 其他常用命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="toc-number">5.</span> <span class="toc-text">五、常见问题与解决</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8%E5%A4%B1%E8%B4%A5%E7%9A%84%E6%8E%92%E6%9F%A5%E6%96%B9%E6%B3%95"><span class="toc-number">5.1.</span> <span class="toc-text">服务启动失败的排查方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86"><span class="toc-number">5.2.</span> <span class="toc-text">权限问题处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="toc-number">5.3.</span> <span class="toc-text">路径问题解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B%E6%8A%80%E5%B7%A7"><span class="toc-number">5.4.</span> <span class="toc-text">日志查看技巧</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">七、总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/02/Linux%E8%AE%BE%E7%BD%AESystemctl%E6%9C%8D%E5%8A%A1/" title="Linux设置Systemctl服务">Linux设置Systemctl服务</a><time datetime="2025-09-02T07:23:21.000Z" title="发表于 2025-09-02 15:23:21">2025-09-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/02/Pydantic%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Pydantic使用指南">Pydantic使用指南</a><time datetime="2025-09-02T07:22:10.000Z" title="发表于 2025-09-02 15:22:10">2025-09-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/02/Hydra%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Hydra使用指南">Hydra使用指南</a><time datetime="2025-09-02T07:21:39.000Z" title="发表于 2025-09-02 15:21:39">2025-09-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/02/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E4%BD%BF%E7%94%A8-cron/" title="Linux定时任务使用(cron)">Linux定时任务使用(cron)</a><time datetime="2025-09-02T06:15:37.000Z" title="发表于 2025-09-02 14:15:37">2025-09-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/02/hello-world/" title="Hello World">Hello World</a><time datetime="2025-09-02T05:30:38.585Z" title="发表于 2025-09-02 13:30:38">2025-09-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By frostfish22</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
