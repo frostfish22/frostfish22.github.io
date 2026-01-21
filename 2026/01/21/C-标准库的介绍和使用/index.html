@@ -1,0 +1,961 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C#标准库的介绍和使用 | frostfishc</title><meta name="author" content="frostfish22"><meta name="copyright" content="frostfish22"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="C# 标准库详解什么是 C# 标准库？C# 标准库是 .NET 平台的核心组成部分，提供了丰富的类和方法，用于开发各种类型的应用程序。它包含在 .NET Framework、.NET Core 和 .NET 5+ 中，为 C# 程序员提供了强大的工具集。 C# 标准库的组成C# 标准库主要由以下几个部分组成：  基础类型库：提供基本数据类型和通用工具 集合库：提供各种数据结构 IO 库：处理文件和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#标准库的介绍和使用">
+<meta property="og:url" content="http://example.com/2026/01/21/C-%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="frostfishc">
+<meta property="og:description" content="C# 标准库详解什么是 C# 标准库？C# 标准库是 .NET 平台的核心组成部分，提供了丰富的类和方法，用于开发各种类型的应用程序。它包含在 .NET Framework、.NET Core 和 .NET 5+ 中，为 C# 程序员提供了强大的工具集。 C# 标准库的组成C# 标准库主要由以下几个部分组成：  基础类型库：提供基本数据类型和通用工具 集合库：提供各种数据结构 IO 库：处理文件和">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.png">
+<meta property="article:published_time" content="2026-01-21T03:05:17.000Z">
+<meta property="article:modified_time" content="2026-01-21T03:09:24.214Z">
+<meta property="article:author" content="frostfish22">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="标准库">
+<meta property="article:tag" content=".NET">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="Java对比">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C#标准库的介绍和使用",
+  "url": "http://example.com/2026/01/21/C-%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/",
+  "image": "http://example.com/img/avatar.png",
+  "datePublished": "2026-01-21T03:05:17.000Z",
+  "dateModified": "2026-01-21T03:09:24.214Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "frostfish22",
+      "url": "https://frostfish22.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/21/C-%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C#标准库的介绍和使用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">frostfishc</span></a><a class="nav-page-title" href="/"><span class="site-name">C#标准库的介绍和使用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">C#标准库的介绍和使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-21T03:05:17.000Z" title="发表于 2026-01-21 11:05:17">2026-01-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-21T03:09:24.214Z" title="更新于 2026-01-21 11:09:24">2026-01-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="C-标准库详解"><a href="#C-标准库详解" class="headerlink" title="C# 标准库详解"></a>C# 标准库详解</h1><h2 id="什么是-C-标准库？"><a href="#什么是-C-标准库？" class="headerlink" title="什么是 C# 标准库？"></a>什么是 C# 标准库？</h2><p>C# 标准库是 .NET 平台的核心组成部分，提供了丰富的类和方法，用于开发各种类型的应用程序。它包含在 .NET Framework、.NET Core 和 .NET 5+ 中，为 C# 程序员提供了强大的工具集。</p>
+<h2 id="C-标准库的组成"><a href="#C-标准库的组成" class="headerlink" title="C# 标准库的组成"></a>C# 标准库的组成</h2><p>C# 标准库主要由以下几个部分组成：</p>
+<ol>
+<li><strong>基础类型库</strong>：提供基本数据类型和通用工具</li>
+<li><strong>集合库</strong>：提供各种数据结构</li>
+<li><strong>IO 库</strong>：处理文件和流操作</li>
+<li><strong>网络库</strong>：提供网络通信功能</li>
+<li><strong>多线程库</strong>：支持并发编程</li>
+<li><strong>反射库</strong>：提供类型信息和动态操作</li>
+<li><strong>序列化库</strong>：支持对象的序列化和反序列化</li>
+<li><strong>加密库</strong>：提供安全加密功能</li>
+<li><strong>正则表达式库</strong>：处理字符串模式匹配</li>
+<li><strong>XML 库</strong>：处理 XML 数据</li>
+<li><strong>LINQ</strong>：语言集成查询</li>
+<li><strong>任务并行库</strong>：高级并行编程</li>
+<li><strong>WPF&#x2F;WinForms</strong>：GUI 开发（仅限 Windows）</li>
+</ol>
+<h2 id="常用库的详细介绍"><a href="#常用库的详细介绍" class="headerlink" title="常用库的详细介绍"></a>常用库的详细介绍</h2><h3 id="1-基础类型库"><a href="#1-基础类型库" class="headerlink" title="1. 基础类型库"></a>1. 基础类型库</h3><p>基础类型库位于 <code>System</code> 命名空间，提供了基本数据类型和通用工具类。</p>
+<h4 id="常用类和方法"><a href="#常用类和方法" class="headerlink" title="常用类和方法"></a>常用类和方法</h4><table>
+<thead>
+<tr>
+<th>类&#x2F;方法</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Object</code></td>
+<td>所有类型的基类</td>
+<td><code>object obj = new object();</code></td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td>字符串操作</td>
+<td><code>string s = &quot;Hello&quot;;</code></td>
+</tr>
+<tr>
+<td><code>DateTime</code></td>
+<td>日期时间处理</td>
+<td><code>DateTime now = DateTime.Now;</code></td>
+</tr>
+<tr>
+<td><code>Math</code></td>
+<td>数学运算</td>
+<td><code>double pi = Math.PI;</code></td>
+</tr>
+<tr>
+<td><code>Convert</code></td>
+<td>类型转换</td>
+<td><code>int i = Convert.ToInt32(&quot;123&quot;);</code></td>
+</tr>
+<tr>
+<td><code>Console</code></td>
+<td>控制台操作</td>
+<td><code>Console.WriteLine(&quot;Hello World&quot;);</code></td>
+</tr>
+<tr>
+<td><code>Random</code></td>
+<td>随机数生成</td>
+<td><code>Random rnd = new Random();</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        <span class="comment">// 字符串操作</span></span><br><span class="line">        <span class="built_in">string</span> s = <span class="string">&quot;Hello, World!&quot;</span>;</span><br><span class="line">        Console.WriteLine(s.Length);  <span class="comment">// 13</span></span><br><span class="line">        Console.WriteLine(s.Substring(<span class="number">7</span>));  <span class="comment">// World!</span></span><br><span class="line">        Console.WriteLine(s.ToUpper());  <span class="comment">// HELLO, WORLD!</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 日期时间</span></span><br><span class="line">        DateTime now = DateTime.Now;</span><br><span class="line">        Console.WriteLine(now.ToString(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>));</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 数学运算</span></span><br><span class="line">        <span class="built_in">double</span> x = <span class="number">3.0</span>, y = <span class="number">4.0</span>;</span><br><span class="line">        <span class="built_in">double</span> hypotenuse = Math.Sqrt(x * x + y * y);</span><br><span class="line">        Console.WriteLine(hypotenuse);  <span class="comment">// 5</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 随机数</span></span><br><span class="line">        Random rnd = <span class="keyword">new</span> Random();</span><br><span class="line">        Console.WriteLine(rnd.Next(<span class="number">1</span>, <span class="number">100</span>));  <span class="comment">// 1-99之间的随机数</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-集合库"><a href="#2-集合库" class="headerlink" title="2. 集合库"></a>2. 集合库</h3><p>集合库位于 <code>System.Collections</code> 和 <code>System.Collections.Generic</code> 命名空间，提供了各种数据结构。</p>
+<h4 id="常用集合类"><a href="#常用集合类" class="headerlink" title="常用集合类"></a>常用集合类</h4><table>
+<thead>
+<tr>
+<th>集合类</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>List&lt;T&gt;</code></td>
+<td>动态数组</td>
+<td><code>List&lt;int&gt; list = new List&lt;int&gt;();</code></td>
+</tr>
+<tr>
+<td><code>Dictionary&lt;K, V&gt;</code></td>
+<td>键值对集合</td>
+<td><code>Dictionary&lt;string, int&gt; dict = new Dictionary&lt;string, int&gt;();</code></td>
+</tr>
+<tr>
+<td><code>HashSet&lt;T&gt;</code></td>
+<td>无序唯一元素集合</td>
+<td><code>HashSet&lt;int&gt; set = new HashSet&lt;int&gt;();</code></td>
+</tr>
+<tr>
+<td><code>Queue&lt;T&gt;</code></td>
+<td>队列（FIFO）</td>
+<td><code>Queue&lt;int&gt; queue = new Queue&lt;int&gt;();</code></td>
+</tr>
+<tr>
+<td><code>Stack&lt;T&gt;</code></td>
+<td>栈（LIFO）</td>
+<td><code>Stack&lt;int&gt; stack = new Stack&lt;int&gt;();</code></td>
+</tr>
+<tr>
+<td><code>LinkedList&lt;T&gt;</code></td>
+<td>双向链表</td>
+<td><code>LinkedList&lt;int&gt; linkedList = new LinkedList&lt;int&gt;();</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        <span class="comment">// List&lt;T&gt;</span></span><br><span class="line">        List&lt;<span class="built_in">int</span>&gt; numbers = <span class="keyword">new</span> List&lt;<span class="built_in">int</span>&gt;();</span><br><span class="line">        numbers.Add(<span class="number">10</span>);</span><br><span class="line">        numbers.Add(<span class="number">20</span>);</span><br><span class="line">        numbers.Add(<span class="number">30</span>);</span><br><span class="line">        </span><br><span class="line">        Console.WriteLine(<span class="string">&quot;List elements:&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="built_in">int</span> num <span class="keyword">in</span> numbers) &#123;</span><br><span class="line">            Console.WriteLine(num);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Dictionary&lt;K, V&gt;</span></span><br><span class="line">        Dictionary&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt; capitals = <span class="keyword">new</span> Dictionary&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt;();</span><br><span class="line">        capitals[<span class="string">&quot;China&quot;</span>] = <span class="string">&quot;Beijing&quot;</span>;</span><br><span class="line">        capitals[<span class="string">&quot;USA&quot;</span>] = <span class="string">&quot;Washington&quot;</span>;</span><br><span class="line">        capitals[<span class="string">&quot;Japan&quot;</span>] = <span class="string">&quot;Tokyo&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        Console.WriteLine(<span class="string">&quot;\nDictionary elements:&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> pair <span class="keyword">in</span> capitals) &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;pair.Key&#125;</span>: <span class="subst">&#123;pair.Value&#125;</span>&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// HashSet&lt;T&gt;</span></span><br><span class="line">        HashSet&lt;<span class="built_in">int</span>&gt; uniqueNumbers = <span class="keyword">new</span> HashSet&lt;<span class="built_in">int</span>&gt;();</span><br><span class="line">        uniqueNumbers.Add(<span class="number">1</span>);</span><br><span class="line">        uniqueNumbers.Add(<span class="number">2</span>);</span><br><span class="line">        uniqueNumbers.Add(<span class="number">1</span>);  <span class="comment">// 重复元素，不会添加</span></span><br><span class="line">        </span><br><span class="line">        Console.WriteLine(<span class="string">&quot;\nHashSet elements:&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="built_in">int</span> num <span class="keyword">in</span> uniqueNumbers) &#123;</span><br><span class="line">            Console.WriteLine(num);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-IO-库"><a href="#3-IO-库" class="headerlink" title="3. IO 库"></a>3. IO 库</h3><p>IO 库位于 <code>System.IO</code> 命名空间，提供文件和流操作功能。</p>
+<h4 id="常用类"><a href="#常用类" class="headerlink" title="常用类"></a>常用类</h4><table>
+<thead>
+<tr>
+<th>类</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>File</code></td>
+<td>文件操作静态方法</td>
+<td><code>File.ReadAllText(&quot;file.txt&quot;);</code></td>
+</tr>
+<tr>
+<td><code>Directory</code></td>
+<td>目录操作静态方法</td>
+<td><code>Directory.CreateDirectory(&quot;folder&quot;);</code></td>
+</tr>
+<tr>
+<td><code>Path</code></td>
+<td>路径操作静态方法</td>
+<td><code>Path.Combine(&quot;dir&quot;, &quot;file.txt&quot;);</code></td>
+</tr>
+<tr>
+<td><code>StreamReader</code></td>
+<td>文本文件读取</td>
+<td><code>using (StreamReader sr = new StreamReader(&quot;file.txt&quot;)) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>StreamWriter</code></td>
+<td>文本文件写入</td>
+<td><code>using (StreamWriter sw = new StreamWriter(&quot;file.txt&quot;)) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>FileStream</code></td>
+<td>字节流操作</td>
+<td><code>using (FileStream fs = new FileStream(&quot;file.bin&quot;, FileMode.Open)) &#123; ... &#125;</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        <span class="built_in">string</span> filePath = <span class="string">&quot;example.txt&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 写入文件</span></span><br><span class="line">        File.WriteAllText(filePath, <span class="string">&quot;Hello, C# IO!&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 读取文件</span></span><br><span class="line">        <span class="built_in">string</span> content = File.ReadAllText(filePath);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;File content:&quot;</span>);</span><br><span class="line">        Console.WriteLine(content);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 追加内容</span></span><br><span class="line">        File.AppendAllText(filePath, <span class="string">&quot;\nAppended text.&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 读取所有行</span></span><br><span class="line">        <span class="built_in">string</span>[] lines = File.ReadAllLines(filePath);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;\nFile lines:&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="built_in">string</span> line <span class="keyword">in</span> lines) &#123;</span><br><span class="line">            Console.WriteLine(line);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 删除文件</span></span><br><span class="line">        File.Delete(filePath);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;\nFile exists: <span class="subst">&#123;File.Exists(filePath)&#125;</span>&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-网络库"><a href="#4-网络库" class="headerlink" title="4. 网络库"></a>4. 网络库</h3><p>网络库位于 <code>System.Net</code> 和 <code>System.Net.Sockets</code> 命名空间，提供网络通信功能。</p>
+<h4 id="常用类-1"><a href="#常用类-1" class="headerlink" title="常用类"></a>常用类</h4><table>
+<thead>
+<tr>
+<th>类</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>WebClient</code></td>
+<td>简单的 HTTP 客户端</td>
+<td><code>using (WebClient client = new WebClient()) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>HttpClient</code></td>
+<td>现代 HTTP 客户端</td>
+<td><code>using (HttpClient client = new HttpClient()) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>TcpClient</code></td>
+<td>TCP 客户端</td>
+<td><code>using (TcpClient client = new TcpClient()) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>TcpListener</code></td>
+<td>TCP 服务器</td>
+<td><code>using (TcpListener listener = new TcpListener(port)) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>Socket</code></td>
+<td>底层套接字操作</td>
+<td><code>Socket socket = new Socket(AddressFamily.InterNetwork, ...);</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Net.Http;</span><br><span class="line"><span class="keyword">using</span> System.Threading.Tasks;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">async</span> Task <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        <span class="comment">// 使用 HttpClient 发送 HTTP 请求</span></span><br><span class="line">        <span class="keyword">using</span> (HttpClient client = <span class="keyword">new</span> HttpClient()) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                HttpResponseMessage response = <span class="keyword">await</span> client.GetAsync(<span class="string">&quot;https://api.github.com/users/octocat&quot;</span>);</span><br><span class="line">                response.EnsureSuccessStatusCode();</span><br><span class="line">                <span class="built_in">string</span> responseBody = <span class="keyword">await</span> response.Content.ReadAsStringAsync();</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;GitHub API response:&quot;</span>);</span><br><span class="line">                Console.WriteLine(responseBody);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (HttpRequestException e) &#123;</span><br><span class="line">                Console.WriteLine(<span class="string">$&quot;Error: <span class="subst">&#123;e.Message&#125;</span>&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-多线程库"><a href="#5-多线程库" class="headerlink" title="5. 多线程库"></a>5. 多线程库</h3><p>多线程库位于 <code>System.Threading</code> 命名空间，提供并发编程功能。</p>
+<h4 id="常用类和方法-1"><a href="#常用类和方法-1" class="headerlink" title="常用类和方法"></a>常用类和方法</h4><table>
+<thead>
+<tr>
+<th>类&#x2F;方法</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Thread</code></td>
+<td>线程操作</td>
+<td><code>Thread thread = new Thread(Work);</code></td>
+</tr>
+<tr>
+<td><code>Task</code></td>
+<td>异步任务</td>
+<td><code>Task.Run(() =&gt; &#123; ... &#125;);</code></td>
+</tr>
+<tr>
+<td><code>ThreadPool</code></td>
+<td>线程池</td>
+<td><code>ThreadPool.QueueUserWorkItem(Work);</code></td>
+</tr>
+<tr>
+<td><code>Mutex</code></td>
+<td>互斥锁</td>
+<td><code>using (Mutex mutex = new Mutex()) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>Monitor</code></td>
+<td>同步锁</td>
+<td><code>lock (obj) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>Semaphore</code></td>
+<td>信号量</td>
+<td><code>using (Semaphore semaphore = new Semaphore(1, 1)) &#123; ... &#125;</code></td>
+</tr>
+<tr>
+<td><code>AutoResetEvent</code></td>
+<td>自动重置事件</td>
+<td><code>using (AutoResetEvent evt = new AutoResetEvent(false)) &#123; ... &#125;</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Threading;</span><br><span class="line"><span class="keyword">using</span> System.Threading.Tasks;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        <span class="comment">// 使用 Task 并行执行</span></span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Main thread started&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        Task task1 = Task.Run(() =&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">                Console.WriteLine(<span class="string">$&quot;Task 1: <span class="subst">&#123;i&#125;</span>&quot;</span>);</span><br><span class="line">                Thread.Sleep(<span class="number">100</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        Task task2 = Task.Run(() =&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">                Console.WriteLine(<span class="string">$&quot;Task 2: <span class="subst">&#123;i&#125;</span>&quot;</span>);</span><br><span class="line">                Thread.Sleep(<span class="number">100</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        Task.WaitAll(task1, task2);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Main thread completed&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 使用 async/await</span></span><br><span class="line">        AsyncExample().Wait();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">async</span> Task <span class="title">AsyncExample</span>()</span> &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;\nAsync example started&quot;</span>);</span><br><span class="line">        <span class="keyword">await</span> Task.Delay(<span class="number">1000</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Async example completed&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-反射库"><a href="#6-反射库" class="headerlink" title="6. 反射库"></a>6. 反射库</h3><p>反射库位于 <code>System.Reflection</code> 命名空间，提供类型信息和动态操作功能。</p>
+<h4 id="常用类-2"><a href="#常用类-2" class="headerlink" title="常用类"></a>常用类</h4><table>
+<thead>
+<tr>
+<th>类</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Type</code></td>
+<td>类型信息</td>
+<td><code>Type type = typeof(string);</code></td>
+</tr>
+<tr>
+<td><code>Assembly</code></td>
+<td>程序集信息</td>
+<td><code>Assembly assembly = Assembly.GetExecutingAssembly();</code></td>
+</tr>
+<tr>
+<td><code>MethodInfo</code></td>
+<td>方法信息</td>
+<td><code>MethodInfo method = type.GetMethod(&quot;ToString&quot;);</code></td>
+</tr>
+<tr>
+<td><code>PropertyInfo</code></td>
+<td>属性信息</td>
+<td><code>PropertyInfo property = type.GetProperty(&quot;Length&quot;);</code></td>
+</tr>
+<tr>
+<td><code>Activator</code></td>
+<td>动态创建实例</td>
+<td><code>object obj = Activator.CreateInstance(type);</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Reflection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Person</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Age &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SayHello</span>()</span> &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Hello, my name is <span class="subst">&#123;Name&#125;</span>!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        <span class="comment">// 获取类型信息</span></span><br><span class="line">        Type personType = <span class="keyword">typeof</span>(Person);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 创建实例</span></span><br><span class="line">        <span class="built_in">object</span> personObj = Activator.CreateInstance(personType);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 设置属性</span></span><br><span class="line">        PropertyInfo nameProperty = personType.GetProperty(<span class="string">&quot;Name&quot;</span>);</span><br><span class="line">        nameProperty.SetValue(personObj, <span class="string">&quot;John&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        PropertyInfo ageProperty = personType.GetProperty(<span class="string">&quot;Age&quot;</span>);</span><br><span class="line">        ageProperty.SetValue(personObj, <span class="number">30</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 调用方法</span></span><br><span class="line">        MethodInfo sayHelloMethod = personType.GetMethod(<span class="string">&quot;SayHello&quot;</span>);</span><br><span class="line">        sayHelloMethod.Invoke(personObj, <span class="literal">null</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 获取属性值</span></span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Name: <span class="subst">&#123;nameProperty.GetValue(personObj)&#125;</span>&quot;</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Age: <span class="subst">&#123;ageProperty.GetValue(personObj)&#125;</span>&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-序列化库"><a href="#7-序列化库" class="headerlink" title="7. 序列化库"></a>7. 序列化库</h3><p>序列化库位于 <code>System.Runtime.Serialization</code> 和 <code>System.Text.Json</code>（.NET Core 3.0+）命名空间。</p>
+<h4 id="常用类-3"><a href="#常用类-3" class="headerlink" title="常用类"></a>常用类</h4><table>
+<thead>
+<tr>
+<th>类</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>JsonSerializer</code></td>
+<td>JSON 序列化&#x2F;反序列化</td>
+<td><code>JsonSerializer.Serialize(obj);</code></td>
+</tr>
+<tr>
+<td><code>XmlSerializer</code></td>
+<td>XML 序列化&#x2F;反序列化</td>
+<td><code>XmlSerializer serializer = new XmlSerializer(typeof(T));</code></td>
+</tr>
+<tr>
+<td><code>BinaryFormatter</code></td>
+<td>二进制序列化&#x2F;反序列化</td>
+<td><code>BinaryFormatter formatter = new BinaryFormatter();</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Text.Json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Person</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Age &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        <span class="comment">// 创建对象</span></span><br><span class="line">        Person person = <span class="keyword">new</span> Person &#123; Name = <span class="string">&quot;John&quot;</span>, Age = <span class="number">30</span> &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 序列化为 JSON</span></span><br><span class="line">        <span class="built_in">string</span> json = JsonSerializer.Serialize(person);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Serialized JSON:&quot;</span>);</span><br><span class="line">        Console.WriteLine(json);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 反序列化为对象</span></span><br><span class="line">        Person deserializedPerson = JsonSerializer.Deserialize&lt;Person&gt;(json);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;\nDeserialized object:&quot;</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Name: <span class="subst">&#123;deserializedPerson.Name&#125;</span>&quot;</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Age: <span class="subst">&#123;deserializedPerson.Age&#125;</span>&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-正则表达式库"><a href="#8-正则表达式库" class="headerlink" title="8. 正则表达式库"></a>8. 正则表达式库</h3><p>正则表达式库位于 <code>System.Text.RegularExpressions</code> 命名空间。</p>
+<h4 id="常用类-4"><a href="#常用类-4" class="headerlink" title="常用类"></a>常用类</h4><table>
+<thead>
+<tr>
+<th>类</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Regex</code></td>
+<td>正则表达式操作</td>
+<td><code>Regex regex = new Regex(@&quot;\d+&quot;);</code></td>
+</tr>
+<tr>
+<td><code>Match</code></td>
+<td>匹配结果</td>
+<td><code>Match match = regex.Match(input);</code></td>
+</tr>
+<tr>
+<td><code>MatchCollection</code></td>
+<td>多个匹配结果</td>
+<td><code>MatchCollection matches = regex.Matches(input);</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Text.RegularExpressions;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        <span class="built_in">string</span> input = <span class="string">&quot;Contact: John (555-1234), Jane (555-5678)&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 匹配电话号码</span></span><br><span class="line">        Regex phoneRegex = <span class="keyword">new</span> Regex(<span class="string">@&quot;\d&#123;3&#125;-\d&#123;4&#125;&quot;</span>);</span><br><span class="line">        MatchCollection matches = phoneRegex.Matches(input);</span><br><span class="line">        </span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Found phone numbers:&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (Match match <span class="keyword">in</span> matches) &#123;</span><br><span class="line">            Console.WriteLine(match.Value);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 替换文本</span></span><br><span class="line">        <span class="built_in">string</span> replaced = phoneRegex.Replace(input, <span class="string">&quot;[REDACTED]&quot;</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;\nAfter replacement:&quot;</span>);</span><br><span class="line">        Console.WriteLine(replaced);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 验证邮箱</span></span><br><span class="line">        <span class="built_in">string</span> email = <span class="string">&quot;user@example.com&quot;</span>;</span><br><span class="line">        Regex emailRegex = <span class="keyword">new</span> Regex(<span class="string">@&quot;^[\w.-]+@[\w.-]+\.\w+$&quot;</span>);</span><br><span class="line">        <span class="built_in">bool</span> isValid = emailRegex.IsMatch(email);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;\nEmail &#x27;<span class="subst">&#123;email&#125;</span>&#x27; is valid: <span class="subst">&#123;isValid&#125;</span>&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-LINQ（语言集成查询）"><a href="#9-LINQ（语言集成查询）" class="headerlink" title="9. LINQ（语言集成查询）"></a>9. LINQ（语言集成查询）</h3><p>LINQ 位于 <code>System.Linq</code> 命名空间，提供统一的查询语法。</p>
+<h4 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h4><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>功能</th>
+<th>使用示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Where</code></td>
+<td>筛选元素</td>
+<td><code>var result = list.Where(x =&gt; x &gt; 5);</code></td>
+</tr>
+<tr>
+<td><code>Select</code></td>
+<td>投影元素</td>
+<td><code>var result = list.Select(x =&gt; x * 2);</code></td>
+</tr>
+<tr>
+<td><code>OrderBy</code></td>
+<td>排序元素</td>
+<td><code>var result = list.OrderBy(x =&gt; x);</code></td>
+</tr>
+<tr>
+<td><code>GroupBy</code></td>
+<td>分组元素</td>
+<td><code>var result = list.GroupBy(x =&gt; x % 2);</code></td>
+</tr>
+<tr>
+<td><code>First</code></td>
+<td>获取第一个元素</td>
+<td><code>var result = list.First();</code></td>
+</tr>
+<tr>
+<td><code>Last</code></td>
+<td>获取最后一个元素</td>
+<td><code>var result = list.Last();</code></td>
+</tr>
+<tr>
+<td><code>Count</code></td>
+<td>计算元素数量</td>
+<td><code>int count = list.Count();</code></td>
+</tr>
+<tr>
+<td><code>Sum</code></td>
+<td>计算元素总和</td>
+<td><code>int sum = list.Sum();</code></td>
+</tr>
+</tbody></table>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span> &#123;</span><br><span class="line">        List&lt;<span class="built_in">int</span>&gt; numbers = <span class="keyword">new</span> List&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span> &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 筛选偶数</span></span><br><span class="line">        <span class="keyword">var</span> evenNumbers = numbers.Where(n =&gt; n % <span class="number">2</span> == <span class="number">0</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Even numbers:&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> num <span class="keyword">in</span> evenNumbers) &#123;</span><br><span class="line">            Console.WriteLine(num);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 投影和排序</span></span><br><span class="line">        <span class="keyword">var</span> squaredNumbers = numbers.Select(n =&gt; n * n).OrderBy(n =&gt; n);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;\nSquared numbers (sorted):&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> num <span class="keyword">in</span> squaredNumbers) &#123;</span><br><span class="line">            Console.WriteLine(num);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 聚合操作</span></span><br><span class="line">        <span class="built_in">int</span> sum = numbers.Sum();</span><br><span class="line">        <span class="built_in">double</span> average = numbers.Average();</span><br><span class="line">        <span class="built_in">int</span> max = numbers.Max();</span><br><span class="line">        <span class="built_in">int</span> min = numbers.Min();</span><br><span class="line">        </span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;\nSum: <span class="subst">&#123;sum&#125;</span>&quot;</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Average: <span class="subst">&#123;average&#125;</span>&quot;</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Max: <span class="subst">&#123;max&#125;</span>&quot;</span>);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Min: <span class="subst">&#123;min&#125;</span>&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 对象集合查询</span></span><br><span class="line">        List&lt;Person&gt; people = <span class="keyword">new</span> List&lt;Person&gt; &#123;</span><br><span class="line">            <span class="keyword">new</span> Person &#123; Name = <span class="string">&quot;John&quot;</span>, Age = <span class="number">30</span> &#125;,</span><br><span class="line">            <span class="keyword">new</span> Person &#123; Name = <span class="string">&quot;Jane&quot;</span>, Age = <span class="number">25</span> &#125;,</span><br><span class="line">            <span class="keyword">new</span> Person &#123; Name = <span class="string">&quot;Bob&quot;</span>, Age = <span class="number">35</span> &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> adults = people.Where(p =&gt; p.Age &gt;= <span class="number">30</span>).OrderBy(p =&gt; p.Name);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;\nAdults (sorted by name):&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> person <span class="keyword">in</span> adults) &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;person.Name&#125;</span>, <span class="subst">&#123;person.Age&#125;</span>&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Person</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Age &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="C-标准库与-Java-标准库的对比"><a href="#C-标准库与-Java-标准库的对比" class="headerlink" title="C# 标准库与 Java 标准库的对比"></a>C# 标准库与 Java 标准库的对比</h2><h3 id="1-整体架构"><a href="#1-整体架构" class="headerlink" title="1. 整体架构"></a>1. 整体架构</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>C# 标准库</th>
+<th>Java 标准库</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>运行环境</td>
+<td>.NET Framework &#x2F; .NET Core &#x2F; .NET 5+</td>
+<td>JVM</td>
+</tr>
+<tr>
+<td>版本控制</td>
+<td>.NET 版本号（如 .NET 8.0）</td>
+<td>Java SE 版本号（如 Java 21）</td>
+</tr>
+<tr>
+<td>模块化</td>
+<td>.NET Core 开始采用模块化设计</td>
+<td>Java 9+ 引入模块系统</td>
+</tr>
+<tr>
+<td>跨平台</td>
+<td>.NET Core&#x2F;5+ 支持跨平台</td>
+<td>支持跨平台</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>近年来性能显著提升，部分场景超越 Java</td>
+<td>成熟稳定，JIT 优化优秀</td>
+</tr>
+</tbody></table>
+<h3 id="2-核心组件对比"><a href="#2-核心组件对比" class="headerlink" title="2. 核心组件对比"></a>2. 核心组件对比</h3><h4 id="2-1-基础类型"><a href="#2-1-基础类型" class="headerlink" title="2.1 基础类型"></a>2.1 基础类型</h4><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>C#</th>
+<th>Java</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>字符串</td>
+<td><code>string</code> &#x2F; <code>String</code></td>
+<td><code>String</code></td>
+<td>C# 有 <code>string</code> 别名，更简洁</td>
+</tr>
+<tr>
+<td>日期时间</td>
+<td><code>DateTime</code></td>
+<td><code>LocalDateTime</code>, <code>Date</code></td>
+<td>C# 的 <code>DateTime</code> 更统一</td>
+</tr>
+<tr>
+<td>数学运算</td>
+<td><code>Math</code></td>
+<td><code>Math</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>控制台</td>
+<td><code>Console</code></td>
+<td><code>System.out</code></td>
+<td>C# 的 <code>Console</code> 功能更丰富</td>
+</tr>
+<tr>
+<td>随机数</td>
+<td><code>Random</code></td>
+<td><code>Random</code></td>
+<td>C# 的 <code>Random</code> 更易用</td>
+</tr>
+</tbody></table>
+<h4 id="2-2-集合框架"><a href="#2-2-集合框架" class="headerlink" title="2.2 集合框架"></a>2.2 集合框架</h4><table>
+<thead>
+<tr>
+<th>集合类型</th>
+<th>C#</th>
+<th>Java</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>列表</td>
+<td><code>List&lt;T&gt;</code></td>
+<td><code>ArrayList</code>, <code>LinkedList</code></td>
+<td>C# 的 <code>List&lt;T&gt;</code> 更常用</td>
+</tr>
+<tr>
+<td>字典</td>
+<td><code>Dictionary&lt;K, V&gt;</code></td>
+<td><code>HashMap</code>, <code>TreeMap</code></td>
+<td>功能相似，C# 语法更简洁</td>
+</tr>
+<tr>
+<td>集合</td>
+<td><code>HashSet&lt;T&gt;</code></td>
+<td><code>HashSet</code>, <code>TreeSet</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>队列</td>
+<td><code>Queue&lt;T&gt;</code></td>
+<td><code>Queue</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>栈</td>
+<td><code>Stack&lt;T&gt;</code></td>
+<td><code>Stack</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>链表</td>
+<td><code>LinkedList&lt;T&gt;</code></td>
+<td><code>LinkedList</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>并发集合</td>
+<td><code>ConcurrentDictionary&lt;T&gt;</code>, etc.</td>
+<td><code>ConcurrentHashMap</code>, etc.</td>
+<td>功能相似</td>
+</tr>
+</tbody></table>
+<h4 id="2-3-IO-操作"><a href="#2-3-IO-操作" class="headerlink" title="2.3 IO 操作"></a>2.3 IO 操作</h4><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>C#</th>
+<th>Java</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件操作</td>
+<td><code>File</code>, <code>FileInfo</code></td>
+<td><code>Files</code>, <code>Path</code></td>
+<td>C# 有静态类和实例类两种方式</td>
+</tr>
+<tr>
+<td>目录操作</td>
+<td><code>Directory</code>, <code>DirectoryInfo</code></td>
+<td><code>Files</code>, <code>Paths</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>流操作</td>
+<td><code>StreamReader</code>, <code>StreamWriter</code></td>
+<td><code>BufferedReader</code>, <code>BufferedWriter</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>二进制操作</td>
+<td><code>BinaryReader</code>, <code>BinaryWriter</code></td>
+<td><code>DataInputStream</code>, <code>DataOutputStream</code></td>
+<td>功能相似</td>
+</tr>
+</tbody></table>
+<h4 id="2-4-网络编程"><a href="#2-4-网络编程" class="headerlink" title="2.4 网络编程"></a>2.4 网络编程</h4><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>C#</th>
+<th>Java</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HTTP 客户端</td>
+<td><code>HttpClient</code></td>
+<td><code>HttpClient</code></td>
+<td>功能相似，C# 的 <code>HttpClient</code> 更现代</td>
+</tr>
+<tr>
+<td>TCP 客户端</td>
+<td><code>TcpClient</code></td>
+<td><code>Socket</code></td>
+<td>C# 的 <code>TcpClient</code> 更高级</td>
+</tr>
+<tr>
+<td>TCP 服务器</td>
+<td><code>TcpListener</code></td>
+<td><code>ServerSocket</code></td>
+<td>C# 的 <code>TcpListener</code> 更易用</td>
+</tr>
+<tr>
+<td>套接字</td>
+<td><code>Socket</code></td>
+<td><code>Socket</code></td>
+<td>功能相似</td>
+</tr>
+</tbody></table>
+<h4 id="2-5-多线程"><a href="#2-5-多线程" class="headerlink" title="2.5 多线程"></a>2.5 多线程</h4><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>C#</th>
+<th>Java</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>线程</td>
+<td><code>Thread</code></td>
+<td><code>Thread</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>异步任务</td>
+<td><code>Task</code></td>
+<td><code>CompletableFuture</code></td>
+<td>C# 的 <code>async/await</code> 语法更简洁</td>
+</tr>
+<tr>
+<td>线程池</td>
+<td><code>ThreadPool</code></td>
+<td><code>Executors</code></td>
+<td>Java 的 <code>Executors</code> 提供更多工厂方法</td>
+</tr>
+<tr>
+<td>锁机制</td>
+<td><code>lock</code>, <code>Monitor</code>, <code>Mutex</code></td>
+<td><code>synchronized</code>, <code>ReentrantLock</code></td>
+<td>C# 的 <code>lock</code> 语法更简洁</td>
+</tr>
+<tr>
+<td>并发工具</td>
+<td><code>Semaphore</code>, <code>AutoResetEvent</code></td>
+<td><code>Semaphore</code>, <code>CountDownLatch</code></td>
+<td>功能相似</td>
+</tr>
+</tbody></table>
+<h4 id="2-6-反射"><a href="#2-6-反射" class="headerlink" title="2.6 反射"></a>2.6 反射</h4><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>C#</th>
+<th>Java</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类型信息</td>
+<td><code>Type</code></td>
+<td><code>Class</code></td>
+<td>C# 的 <code>Type</code> 更统一</td>
+</tr>
+<tr>
+<td>程序集</td>
+<td><code>Assembly</code></td>
+<td><code>ClassLoader</code>, <code>Module</code></td>
+<td>C# 的 <code>Assembly</code> 概念更清晰</td>
+</tr>
+<tr>
+<td>创建实例</td>
+<td><code>Activator.CreateInstance</code></td>
+<td><code>Class.newInstance</code>, <code>Constructor.newInstance</code></td>
+<td>C# 的方式更简洁</td>
+</tr>
+<tr>
+<td>方法调用</td>
+<td><code>MethodInfo.Invoke</code></td>
+<td><code>Method.invoke</code></td>
+<td>功能相似</td>
+</tr>
+</tbody></table>
+<h4 id="2-7-序列化"><a href="#2-7-序列化" class="headerlink" title="2.7 序列化"></a>2.7 序列化</h4><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>C#</th>
+<th>Java</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JSON 序列化</td>
+<td><code>System.Text.Json</code></td>
+<td><code>Jackson</code>, <code>Gson</code></td>
+<td>C# 内置 JSON 支持，Java 常用第三方库</td>
+</tr>
+<tr>
+<td>XML 序列化</td>
+<td><code>XmlSerializer</code></td>
+<td><code>JAXB</code></td>
+<td>功能相似</td>
+</tr>
+<tr>
+<td>二进制序列化</td>
+<td><code>BinaryFormatter</code></td>
+<td><code>ObjectOutputStream</code></td>
+<td>功能相似</td>
+</tr>
+</tbody></table>
+<h4 id="2-8-其他功能"><a href="#2-8-其他功能" class="headerlink" title="2.8 其他功能"></a>2.8 其他功能</h4><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>C#</th>
+<th>Java</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>正则表达式</td>
+<td><code>Regex</code></td>
+<td><code>Pattern</code>, <code>Matcher</code></td>
+<td>C# 的 <code>Regex</code> 使用更简洁</td>
+</tr>
+<tr>
+<td>LINQ</td>
+<td><code>System.Linq</code></td>
+<td>流 API (<code>Stream</code>)</td>
+<td>C# 的 LINQ 语法更强大，Java 的流 API 更函数式</td>
+</tr>
+<tr>
+<td>异步编程</td>
+<td><code>async/await</code></td>
+<td><code>CompletableFuture</code>, <code>CompletableStage</code></td>
+<td>C# 的 <code>async/await</code> 语法更简洁</td>
+</tr>
+<tr>
+<td>扩展方法</td>
+<td>支持</td>
+<td>不支持（Java 8+ 有默认方法）</td>
+<td>C# 的扩展方法更灵活</td>
+</tr>
+<tr>
+<td>委托和事件</td>
+<td><code>delegate</code>, <code>event</code></td>
+<td>接口 + 匿名内部类，lambda</td>
+<td>C# 的委托和事件语法更简洁</td>
+</tr>
+<tr>
+<td>特性（注解）</td>
+<td><code>Attribute</code></td>
+<td><code>Annotation</code></td>
+<td>功能相似</td>
+</tr>
+</tbody></table>
+<h3 id="3-语法和使用风格对比"><a href="#3-语法和使用风格对比" class="headerlink" title="3. 语法和使用风格对比"></a>3. 语法和使用风格对比</h3><h4 id="3-1-语法风格"><a href="#3-1-语法风格" class="headerlink" title="3.1 语法风格"></a>3.1 语法风格</h4><ul>
+<li><strong>C#</strong>：更注重语法简洁性和表达力，如 <code>var</code> 类型推断、<code>async/await</code> 异步语法、扩展方法等</li>
+<li><strong>Java</strong>：更注重代码的清晰性和一致性，语法相对保守但更严谨</li>
+</ul>
+<h4 id="3-2-异常处理"><a href="#3-2-异常处理" class="headerlink" title="3.2 异常处理"></a>3.2 异常处理</h4><ul>
+<li><strong>C#</strong>：区分检查异常和非检查异常，但语法更简洁</li>
+<li><strong>Java</strong>：强制要求处理检查异常，代码更冗长但更安全</li>
+</ul>
+<h4 id="3-3-泛型实现"><a href="#3-3-泛型实现" class="headerlink" title="3.3 泛型实现"></a>3.3 泛型实现</h4><ul>
+<li><strong>C#</strong>：运行时泛型，保留类型信息</li>
+<li><strong>Java</strong>：类型擦除，运行时不保留类型信息</li>
+</ul>
+<h4 id="3-4-内存管理"><a href="#3-4-内存管理" class="headerlink" title="3.4 内存管理"></a>3.4 内存管理</h4><ul>
+<li><strong>C#</strong>：垃圾回收器，支持析构函数和 <code>IDisposable</code> 接口</li>
+<li><strong>Java</strong>：垃圾回收器，支持 <code>finalize()</code> 方法</li>
+</ul>
+<h4 id="3-5-跨平台支持"><a href="#3-5-跨平台支持" class="headerlink" title="3.5 跨平台支持"></a>3.5 跨平台支持</h4><ul>
+<li><strong>C#</strong>：.NET Core&#x2F;5+ 支持跨平台</li>
+<li><strong>Java</strong>：原生支持跨平台</li>
+</ul>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><h3 id="1-选择合适的库"><a href="#1-选择合适的库" class="headerlink" title="1. 选择合适的库"></a>1. 选择合适的库</h3><ul>
+<li>根据应用场景选择合适的库组件</li>
+<li>优先使用 .NET Core&#x2F;5+ 中的现代 API</li>
+<li>对于性能敏感的场景，选择更底层的 API</li>
+</ul>
+<h3 id="2-性能优化"><a href="#2-性能优化" class="headerlink" title="2. 性能优化"></a>2. 性能优化</h3><ul>
+<li>使用 <code>async/await</code> 处理 I&#x2F;O 操作</li>
+<li>合理使用缓存减少重复计算</li>
+<li>选择合适的集合类型</li>
+<li>避免不必要的装箱和拆箱</li>
+<li>合理使用并行编程</li>
+</ul>
+<h3 id="3-代码质量"><a href="#3-代码质量" class="headerlink" title="3. 代码质量"></a>3. 代码质量</h3><ul>
+<li>遵循 .NET 设计规范</li>
+<li>使用 <code>using</code> 语句管理资源</li>
+<li>合理处理异常</li>
+<li>编写单元测试</li>
+<li>使用代码分析工具</li>
+</ul>
+<h3 id="4-安全性"><a href="#4-安全性" class="headerlink" title="4. 安全性"></a>4. 安全性</h3><ul>
+<li>避免使用不安全的代码</li>
+<li>注意输入验证</li>
+<li>使用安全的加密算法</li>
+<li>遵循最佳安全实践</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>C# 标准库是一个功能强大、设计优雅的库集合，它为 C# 开发者提供了丰富的工具和功能，涵盖了从基础类型操作到高级网络编程的各个方面。</p>
+<p>与 Java 标准库相比，C# 标准库在以下方面具有优势：</p>
+<ol>
+<li><strong>语法简洁性</strong>：如 <code>var</code> 类型推断、<code>async/await</code> 异步语法等</li>
+<li><strong>统一的 API 设计</strong>：如 <code>DateTime</code> 类的统一设计</li>
+<li><strong>强大的 LINQ</strong>：提供了更灵活的查询语法</li>
+<li><strong>现代的异步编程模型</strong>：<code>async/await</code> 语法更简洁易用</li>
+<li><strong>扩展方法</strong>：允许向现有类型添加方法</li>
+</ol>
+<p>同时，Java 标准库在以下方面具有优势：</p>
+<ol>
+<li><strong>更成熟的生态系统</strong>：第三方库更丰富</li>
+<li><strong>更严格的类型系统</strong>：强制检查异常</li>
+<li><strong>更统一的集合框架</strong>：设计更一致</li>
+<li><strong>更好的跨平台支持</strong>：原生支持跨平台</li>
+</ol>
+<p>无论是 C# 还是 Java，它们的标准库都是各自语言的重要组成部分，掌握它们的使用对于提高开发效率和代码质量至关重要。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/dotnet/api/">Microsoft Docs: .NET API Reference</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/">C# Programming Guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/">Java Platform Standard Edition Documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.mindk.com/blog/net-vs-java/">.NET vs Java: A Comprehensive Comparison</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/csharp/csharp_vs_java.htm">C# and Java: Differences and Similarities</a></li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C#</a><a class="post-meta__tags" href="/tags/%E6%A0%87%E5%87%86%E5%BA%93/">标准库</a><a class="post-meta__tags" href="/tags/NET/">.NET</a><a class="post-meta__tags" href="/tags/%E7%BC%96%E7%A8%8B/">编程</a><a class="post-meta__tags" href="/tags/Java%E5%AF%B9%E6%AF%94/">Java对比</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/01/21/C-STL%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/" title="C++ STL的介绍和使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++ STL的介绍和使用</div></div><div class="info-2"><div class="info-item-1">C++ STL 标准库详解什么是 STL？STL（Standard Template Library，标准模板库）是 C++ 标准库的重要组成部分，它提供了一组通用的模板类和函数，用于实现常见的数据结构和算法。STL 的设计理念是泛型编程，通过模板技术实现了数据结构和算法的高度复用。 STL 的组成部分STL 主要由以下六个部分组成：  容器（Containers）：存储数据的对象 迭代器（Iterators）：用于遍历容器中的元素 算法（Algorithms）：操作容器中元素的函数 函数对象（Functors）：具有函数行为的对象 适配器（Adapters）：修改其他组件接口的组件 分配器（Allocators）：负责内存分配和释放  常用容器1. 序列容器序列容器按照线性顺序存储元素，支持随机访问或顺序访问。 1.1 vectorvector 是最常用的序列容器，它是一个动态数组，支持随机访问。 常用函数：    函数 功能 时间复杂度    push_back() 在末尾添加元素 均摊 O(1)   pop_back() 删除末尾元素 O(1)   size() 返回元素个...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/01/20/%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/" title="回调函数"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-20</div><div class="info-item-2">回调函数</div></div><div class="info-2"><div class="info-item-1">回调函数详解什么是回调函数？回调函数（Callback Function）是一种特殊的函数，它被作为参数传递给另一个函数，并且在适当的时候被调用执行。简单来说，就是你定义一个函数，然后把它交给别人，让别人在需要的时候调用它。 回调函数的核心思想是：将函数的调用权交给其他代码，实现了控制反转（Inversion of Control）的设计模式。 回调函数的基本原理 定义回调函数：创建一个符合特定签名的函数 注册回调函数：将回调函数作为参数传递给另一个函数 触发回调：在适当的时机，调用注册的回调函数 执行回调：回调函数被执行，完成特定任务  各语言实现回调函数的方式C++ 实现回调函数C++ 中实现回调函数有多种方式： 1. 函数指针1234567891011121314151617181920#include &lt;iostream&gt;// 回调函数类型定义typedef void (*CallbackFunc)(int);// 注册回调的函数void registerCallback(CallbackFunc callback) &#123;    // 在适当的时候调用...</div></div></div></a><a class="pagination-related" href="/2026/01/21/%E6%B3%9B%E5%9E%8B/" title="泛型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-21</div><div class="info-item-2">泛型</div></div><div class="info-2"><div class="info-item-1">泛型编程详解什么是泛型？泛型（Generics）是一种编程范式，它允许在定义函数、类或接口时使用类型参数，而不是具体的类型。这些类型参数在使用时被实际的类型替换，从而实现代码的复用和类型安全。 简单来说，泛型就是”参数化类型”，将类型作为参数传递给函数、类或接口。 泛型出现的原因1. 代码复用在泛型出现之前，为了支持不同类型，开发者不得不：  为每种类型编写重复的代码 使用类型转换（如C中的void*） 牺牲类型安全  2. 类型安全使用泛型可以在编译时检测类型错误，而不是在运行时才发现。 3. 性能优化泛型避免了运行时的类型转换，提高了代码执行效率。 4. 抽象层次提升泛型允许开发者编写更抽象、更通用的代码，关注算法和逻辑本身，而不是具体的类型。 泛型的应用领域和使用场景1. 集合框架 容器类：如List、Map、Set等，存储不同类型的元素 数据结构：如栈、队列、树等，支持不同类型的数据  2. 算法实现 排序算法：适用于不同类型的元素比较 搜索算法：适用于不同类型的元素查找 遍历操作：适用于不同类型集合的遍历  3. 业务逻辑抽象 DAO层：数据访问对象的通用实现 服务层：...</div></div></div></a><a class="pagination-related" href="/2026/01/21/C-STL%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/" title="C++ STL的介绍和使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-21</div><div class="info-item-2">C++ STL的介绍和使用</div></div><div class="info-2"><div class="info-item-1">C++ STL 标准库详解什么是 STL？STL（Standard Template Library，标准模板库）是 C++ 标准库的重要组成部分，它提供了一组通用的模板类和函数，用于实现常见的数据结构和算法。STL 的设计理念是泛型编程，通过模板技术实现了数据结构和算法的高度复用。 STL 的组成部分STL 主要由以下六个部分组成：  容器（Containers）：存储数据的对象 迭代器（Iterators）：用于遍历容器中的元素 算法（Algorithms）：操作容器中元素的函数 函数对象（Functors）：具有函数行为的对象 适配器（Adapters）：修改其他组件接口的组件 分配器（Allocators）：负责内存分配和释放  常用容器1. 序列容器序列容器按照线性顺序存储元素，支持随机访问或顺序访问。 1.1 vectorvector 是最常用的序列容器，它是一个动态数组，支持随机访问。 常用函数：    函数 功能 时间复杂度    push_back() 在末尾添加元素 均摊 O(1)   pop_back() 删除末尾元素 O(1)   size() 返回元素个...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">frostfish22</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/frostfish22"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E6%A0%87%E5%87%86%E5%BA%93%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text">C# 标准库详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-C-%E6%A0%87%E5%87%86%E5%BA%93%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">什么是 C# 标准库？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">1.2.</span> <span class="toc-text">C# 标准库的组成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%BA%93%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.3.</span> <span class="toc-text">常用库的详细介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B%E5%BA%93"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. 基础类型库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">常用类和方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%9B%86%E5%90%88%E5%BA%93"><span class="toc-number">1.3.2.</span> <span class="toc-text">2. 集合库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E9%9B%86%E5%90%88%E7%B1%BB"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">常用集合类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-IO-%E5%BA%93"><span class="toc-number">1.3.3.</span> <span class="toc-text">3. IO 库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B1%BB"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">常用类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%BD%91%E7%BB%9C%E5%BA%93"><span class="toc-number">1.3.4.</span> <span class="toc-text">4. 网络库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B1%BB-1"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">常用类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%93"><span class="toc-number">1.3.5.</span> <span class="toc-text">5. 多线程库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95-1"><span class="toc-number">1.3.5.1.</span> <span class="toc-text">常用类和方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%8F%8D%E5%B0%84%E5%BA%93"><span class="toc-number">1.3.6.</span> <span class="toc-text">6. 反射库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B1%BB-2"><span class="toc-number">1.3.6.1.</span> <span class="toc-text">常用类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%BA%8F%E5%88%97%E5%8C%96%E5%BA%93"><span class="toc-number">1.3.7.</span> <span class="toc-text">7. 序列化库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B1%BB-3"><span class="toc-number">1.3.7.1.</span> <span class="toc-text">常用类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BA%93"><span class="toc-number">1.3.8.</span> <span class="toc-text">8. 正则表达式库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B1%BB-4"><span class="toc-number">1.3.8.1.</span> <span class="toc-text">常用类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-LINQ%EF%BC%88%E8%AF%AD%E8%A8%80%E9%9B%86%E6%88%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="toc-number">1.3.9.</span> <span class="toc-text">9. LINQ（语言集成查询）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.9.1.</span> <span class="toc-text">常用方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E-Java-%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-number">1.4.</span> <span class="toc-text">C# 标准库与 Java 标准库的对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 整体架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E5%AF%B9%E6%AF%94"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 核心组件对比</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">2.1 基础类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">2.2 集合框架</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-IO-%E6%93%8D%E4%BD%9C"><span class="toc-number">1.4.2.3.</span> <span class="toc-text">2.3 IO 操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B"><span class="toc-number">1.4.2.4.</span> <span class="toc-text">2.4 网络编程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.4.2.5.</span> <span class="toc-text">2.5 多线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-%E5%8F%8D%E5%B0%84"><span class="toc-number">1.4.2.6.</span> <span class="toc-text">2.6 反射</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-7-%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.4.2.7.</span> <span class="toc-text">2.7 序列化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-8-%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD"><span class="toc-number">1.4.2.8.</span> <span class="toc-text">2.8 其他功能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AF%AD%E6%B3%95%E5%92%8C%E4%BD%BF%E7%94%A8%E9%A3%8E%E6%A0%BC%E5%AF%B9%E6%AF%94"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. 语法和使用风格对比</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E8%AF%AD%E6%B3%95%E9%A3%8E%E6%A0%BC"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">3.1 语法风格</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">3.2 异常处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-%E6%B3%9B%E5%9E%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">3.3 泛型实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.4.3.4.</span> <span class="toc-text">3.4 内存管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%94%AF%E6%8C%81"><span class="toc-number">1.4.3.5.</span> <span class="toc-text">3.5 跨平台支持</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.5.</span> <span class="toc-text">最佳实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%BA%93"><span class="toc-number">1.5.1.</span> <span class="toc-text">1. 选择合适的库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">1.5.2.</span> <span class="toc-text">2. 性能优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F"><span class="toc-number">1.5.3.</span> <span class="toc-text">3. 代码质量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">1.5.4.</span> <span class="toc-text">4. 安全性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.7.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/21/C-%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/" title="C#标准库的介绍和使用">C#标准库的介绍和使用</a><time datetime="2026-01-21T03:05:17.000Z" title="发表于 2026-01-21 11:05:17">2026-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/21/C-STL%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/" title="C++ STL的介绍和使用">C++ STL的介绍和使用</a><time datetime="2026-01-21T02:48:58.000Z" title="发表于 2026-01-21 10:48:58">2026-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/21/%E6%B3%9B%E5%9E%8B/" title="泛型">泛型</a><time datetime="2026-01-21T02:30:50.000Z" title="发表于 2026-01-21 10:30:50">2026-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/20/%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/" title="回调函数">回调函数</a><time datetime="2026-01-20T09:47:55.000Z" title="发表于 2026-01-20 17:47:55">2026-01-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/27/SpringBoot3%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3%E4%BB%8B%E7%BB%8D/" title="SpringBoot3常用注解介绍">SpringBoot3常用注解介绍</a><time datetime="2025-09-27T03:23:17.000Z" title="发表于 2025-09-27 11:23:17">2025-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By frostfish22</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
